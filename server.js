@@ -2,6 +2,7 @@ const express = require('express');
 const mysql = require('mysql2'); 
 const bodyParser = require('body-parser');
 const path = require('path');
+const bcrypt = require('bcrypt');
 
 const app = express();
 const port = 3000;
@@ -27,17 +28,25 @@ db.connect((err) => {
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
 
-  const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
-  db.query(query, [username, password], (err, results) => {
+  const query = 'SELECT * FROM users WHERE username = ?';
+  db.query(query, [username], async (err, results) => {
     if (err) {
       console.error('Database query error:', err);
       return res.status(500).send('Database error');
     }
-
-    if (results.length > 0) {
-      res.send('Login successful!');
-    } else {
-      res.status(401).send('Invalid username or password');
+    if (results.length === 0) {
+      return res.status(401).send('Invalid username');
+    }
+    
+    try {
+      const valid = await bcrypt.compare(password, results[0].password);
+      if (valid) {
+        res.send('Login successful!');
+      } else {
+        res.status(401).send('Invalid username or password');
+      }
+    } catch (err) {
+       res.status(500).send('Something went wrong');
     }
   });
 });
