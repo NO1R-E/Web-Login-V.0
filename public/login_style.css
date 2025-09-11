@@ -29,7 +29,37 @@ button {
     border-radius: 4px;
 }
 .message {
-    margin-top: 10px;
+    margin-top: 2px; 
+    margin-right: 10px;  
     color: red;
     font-weight: bold;
+}
+
+.below-submit {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 5px;
+}
+
+.links_group {
+    margin-top: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0px;
+}
+
+.links {
+    margin: 0;
+    padding: 0;
+    font-size: small;
+    text-align: right;
+}
+.links a {
+    color: gray;
+}
+.links a:hover {
+    color: #4CAF50;
+    text-decoration: underline;
 }
