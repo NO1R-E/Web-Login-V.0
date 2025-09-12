@@ -29,3 +29,15 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
       messageDiv.textContent = 'Invalid username or password.';
     });
 });
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const messageDiv = document.getElementById('message');
+
+function clearMessage() {
+    if (messageDiv.textContent !== '') {
+        messageDiv.textContent = '';
+    }
+}
+
+usernameInput.addEventListener('input', clearMessage);
+passwordInput.addEventListener('input', clearMessage);
