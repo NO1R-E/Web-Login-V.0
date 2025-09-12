@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <title>Login Page</title>
-  <link rel="stylesheet" href="login_style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="login-container">
     <h2>Login</h2>
     <form id="loginForm">
-      <input type="text" id="username" name="username" placeholder="Username" required />
+      <input type="text" id="username" name="username" placeholder="Username or email address" required />
       <input type="password" id="password" name="password" placeholder="Password" required />
       <button type="submit">Login</button>
       <div class="below-submit">
-        <div class="message" id="message"></div>
+        <div class="alert" id="alert_login_status"></div>
         <div class="links_group">
           <p class="links"><a href="register.html">don't have an account?</a></p>
-          <p class="links" id="forgetpasswordtext"><a href="forgot-password.html">forgot your password?</a></p>
+          <p class="links" id="forgetpasswordtext"><a href="reset_password.html">forgot your password?</a></p>
         </div>
       </div>
     </form>

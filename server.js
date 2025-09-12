@@ -15,7 +15,7 @@ const db = mysql.createConnection({
   host: process.env.db_host,
   user: process.env.db_user,
   password: process.env.db_pass,
-  database: process.env.name  
+  database: process.env.db_name  
 });
 
 db.connect((err) => {
@@ -26,11 +26,11 @@ db.connect((err) => {
   console.log('Connected to MySQL');
 });
 
+//--Login--
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
-
-  const query = 'SELECT * FROM users WHERE username = ?';
-  db.query(query, [username], async (err, results) => {
+  const query = 'SELECT * FROM users WHERE username = ? OR email = ?';
+  db.query(query, [username, username], async (err, results) => {
     if (err) {
       console.error('Database query error:', err);
       return res.status(500).send('Database error');
@@ -49,6 +49,42 @@ app.post('/login', (req, res) => {
     } catch (err) {
        res.status(500).send('Something went wrong');
     }
+  });
+});
+//--Register--
+app.post('/register', async (req, res) => {
+  const { email, username, password } = req.body;
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const query = 'INSERT INTO users (email, username, password) VALUES (?, ?, ?)';
+    db.query(query, [email, username, hashedPassword], (err) => {
+      if (err) {
+        console.error('Insert error:', err);
+        return res.status(500).send('Database error');
+      }
+      res.send('success');
+    });
+  } catch (err) {
+    console.error('Hash error:', err);
+    res.status(500).send('Server error');
+  }
+});
+//--Check Mail--
+app.post('/check-email', (req, res) => {
+  const { email } = req.body;
+  db.query('SELECT id FROM users WHERE email = ?', [email], (err, results) => {
+    if (err) return res.status(500).send('error');
+    if (results.length > 0) return res.send('exists');
+    res.send('ok');
+  });
+});
+//--Check Username--
+app.post('/check-username', (req, res) => {
+  const { username } = req.body;
+  db.query('SELECT id FROM users WHERE username = ?', [username], (err, results) => {
+    if (err) return res.status(500).send('error');
+    if (results.length > 0) return res.send('exists');
+    res.send('ok');
   });
 });
 
